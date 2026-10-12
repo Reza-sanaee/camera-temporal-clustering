@@ -1,0 +1,92 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=22mm,headheight=16pt]{geometry}
+\usepackage{amsmath,amssymb,graphicx,array,longtable,booktabs}
+\usepackage{microtype,xcolor,hyperref,xurl,fancyhdr}
+\definecolor{Navy}{HTML}{17324D}
+\definecolor{Teal}{HTML}{087F8C}
+\definecolor{Gold}{HTML}{B88128}
+\hypersetup{colorlinks=true,linkcolor=Navy,urlcolor=Teal,bookmarksnumbered=true,hypertexnames=false}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{4em}
+\setcounter{tocdepth}{1}
+\pagestyle{fancy}\fancyhf{}
+\fancyfoot[R]{\small\thepage}
+\fancyfoot[L]{\small\sffamily Sharif University of Technology}
+\renewcommand{\headrulewidth}{0.3pt}
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}{-3.2ex plus -1ex minus -.2ex}{1.6ex plus .2ex}{\normalfont\Large\sffamily\bfseries\color{Navy}}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{-2.5ex plus -1ex minus -.2ex}{1.2ex plus .2ex}{\normalfont\large\sffamily\bfseries\color{Teal}}}
+\makeatother
+\fancyhead[L]{\small\sffamily\color{Navy}Sharif University of Technology}\fancyhead[R]{\small\sffamily\color{Teal}Project Assignment}\begin{document}
+\begin{titlepage}\centering\vspace*{7mm}
+\includegraphics[width=31mm]{assets/sharif_emblem_en.png}\par\vspace{5mm}
+{\Large\sffamily\bfseries\color{Navy}SHARIF UNIVERSITY OF TECHNOLOGY\par}
+\vspace{2mm}{\sffamily Department of Electrical Engineering\par}
+\vspace{17mm}{\color{Teal}\rule{\linewidth}{1.4pt}}\par\vspace{6mm}
+{\large\sffamily\color{Teal}PROJECT ASSIGNMENT\par}
+\vspace{8mm}{\huge\sffamily\bfseries\color{Navy}Weekly Camera-Traffic Profiles with RDD PCA and K-Means\par}
+\vspace{9mm}{\color{Gold}\rule{45mm}{1pt}}\par\vfill
+\begin{minipage}{.88\linewidth}
+{\sffamily\color{Teal}INSTRUCTOR / INSTRUCTORS}\par
+Dr Iman Gholampour\par\vspace{7mm}
+{\sffamily\color{Teal}ACADEMIC CONTEXT}\par
+Big Data Processing\par\end{minipage}\vfill
+\end{titlepage}
+\tableofcontents\clearpage
+\section{Practical exercise 1: temporal camera clustering}
+
+Dr Iman Gholampour's third Big Data Analytics assignment uses traffic.csv. The practical designers are Mehdi Noureldini and Iman Ahmadi;\allowbreak{} the theory designer is Seyed Hassan Sadeghzadeh. For the camera exercise use only RDD transformations/\allowbreak{}actions, without DataFrames or high-level equivalents. Count total observations and parse PassDateTime into weekday and hour. Construct a 168-dimensional vector for every DeviceCode, with seven days times 24 hours and index=\allowbreak{}(DOW-1)*24+\allowbreak{}hour. DOW is 1 through 7 and hour 0 through 23. The extracted source has truncated/\allowbreak{}reversed numerals in places;\allowbreak{} the indexing formula unambiguously defines 168 dimensions. Normalize each nonzero camera vector by its L1 sum and explain why. Perform PCA on the normalized vectors. Choose the smallest k\_\allowbreak{}pca whose cumulative explained variance reaches at least 90 percent, report k\_\allowbreak{}pca and the cumulative value, and plot the variance curve. Cluster in PCA space using random K-Means initialization and the requested K-Means+\allowbreak{}+\allowbreak{}-style initialization. Compare K from 3 through 12, write the silhouette formula, tabulate scores, choose K, and discuss initialization stability. Identify the actual Spark initialization mode when implementing a scalable variant rather than labeling it exact sequential K-Means+\allowbreak{}+\allowbreak{}. Produce four figures for each method:\allowbreak{} cluster sizes;\allowbreak{} mean 24-hour profiles;\allowbreak{} PC1/\allowbreak{}PC2 scatter colored by cluster;\allowbreak{} and a representative camera nearest the centroid superimposed on its cluster's mean hourly profile. Compare the methods based on those outputs.
+
+\section{Camera export requirements}
+
+Produce camera-cluster CSVs with DeviceCode, ClusterID, TotalPasses, UniquePlates, and PeakHour. Produce cluster-hour-profile CSVs with ClusterID, Hour, and AvgPHour, the average normalized hourly share across cameras in the cluster. Export a workbook with sheets KM\_\allowbreak{}CameraClusters, KM\_\allowbreak{}HourProfile, KMpp\_\allowbreak{}CameraClusters, and KMpp\_\allowbreak{}HourProfile. Deliver the code, report, CSVs, and workbook. Preserve each camera's normalized distribution when averaging so that highly trafficked cameras do not unintentionally dominate.
+
+\section{Practical exercise 2: book recommendation}
+
+Load Books.csv, Users.csv, and Ratings.csv into PySpark. Display each schema and five sample rows. Clean the rating data and inappropriate/\allowbreak{}missing book fields as justified. Left-join ratings to users on User-ID and then to books on the common ISBN field. The source's reference to goods is treated as the Books dataset. Produce five titled, labeled, interpreted plots:\allowbreak{} rating histogram;\allowbreak{} ten most-rated books;\allowbreak{} ten most popular authors;\allowbreak{} age distribution of active users;\allowbreak{} and age versus mean rating. Choose and explain ALS and neural-based recommendation methods as requested. Convert the model input to (user id,isbn,rating), split training/\allowbreak{}test data, train the selected models, and analyze rank, maxIter, and regParam where applicable. Recommend five products to at least five existing customers, and provide popular-product recommendations for a new customer. Evaluate and discuss results on the supplied book rating.json evaluation data. Introduce/\allowbreak{}compare suitable metrics, explain recommender challenges and remedies, and give at least two realistic improvement proposals.
+
+\section{Theory requirements}
+
+\begin{enumerate}
+
+\item Define BFR's discard, compression, and retained sets and their RAM implications. Give its diagonal Mahalanobis-distance formula and explain axis-aligned elliptical clusters.
+
+\item Prove that the squared Frobenius norm equals the sum of squared singular values, using trace and A=\allowbreak{}U Sigma V-transpose.
+
+\item For A=\allowbreak{}2,B=\allowbreak{}5,C=\allowbreak{}9,D=\allowbreak{}15,E=\allowbreak{}16,F=\allowbreak{}18, perform centroid-linkage agglomeration until two clusters remain and draw the dendrogram.
+
+\item For singular values 20,12,8,1.5,0.5, compute total energy and the percentage preserved by rank two.
+
+\item Use the utility matrix below for item-item similarity after subtracting each user's mean, then estimate A's missing rating for item 2. Explain the specified similarity convention because one shared user is insufficient for ordinary statistical Pearson correlation.
+
+\end{enumerate}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{@{}p{0.1760\linewidth}p{0.1760\linewidth}p{0.1760\linewidth}p{0.1760\linewidth}p{0.1760\linewidth}@{}}
+\toprule
+\textbf{User} & \textbf{Item 1} & \textbf{Item 2} & \textbf{Item 3} & \textbf{Item 4} \\ \midrule
+\endfirsthead
+\textbf{User} & \textbf{Item 1} & \textbf{Item 2} & \textbf{Item 3} & \textbf{Item 4} \\ \midrule \endhead
+A & 4 & unknown & 5 & 1 \\
+B & 5 & 5 & 4 & unknown \\
+C & unknown & 4 & unknown & 2 \\
+\bottomrule\end{longtable}\endgroup
+
+\begin{enumerate}
+
+\item Explain cold start for a new user and a new item, why interaction-only collaborative filtering has insufficient information, and remedies. Theory answers use the requested StudentID\_\allowbreak{}LastName\_\allowbreak{}HW3.pdf naming convention.
+
+\end{enumerate}
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.18}\begin{longtable}{@{}p{0.1720\linewidth}p{0.1720\linewidth}p{0.1720\linewidth}p{0.1720\linewidth}p{0.1720\linewidth}@{}}
+\caption{Theory requirements - numerical data and parameters.}\label{tab:rar_HW3_p010_table10}\\\toprule
+\textbf{User} & \textbf{Item 1} & \textbf{Item 2} & \textbf{Item 3} & \textbf{Item 4} \\ \midrule\endfirsthead \textbf{User} & \textbf{Item 1} & \textbf{Item 2} & \textbf{Item 3} & \textbf{Item 4} \\ \midrule\endhead
+A & 4 & ? & 5 & 1 \\
+B & 5 & 5 & 4 & ? \\
+C & ? & 4 & ? & 2 \\
+\bottomrule\end{longtable}\endgroup
+\clearpage
+\end{document}
